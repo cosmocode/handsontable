@@ -601,6 +601,8 @@ ContextMenu.prototype.renderer = function(instance, TD, row, col, prop, value) {
   dom.empty(TD);
   TD.appendChild(wrapper);
 
+  Handsontable.Dom.addClass(wrapper, item.key); // ANDI add class to menu entries
+
   if (itemIsSeparator(item)) {
     dom.addClass(TD, 'htSeparator');
   } else {
