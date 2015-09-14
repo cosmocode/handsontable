@@ -29,7 +29,8 @@
   var method = nonEnum;
   var counter = 0;
   function newUniqueString() {
-    return '__$' + Math.floor(Math.random() * 1e9) + '$' + ++counter + '$__';
+    ++counter;
+    return '__$' + Math.floor(Math.random() * 1e9) + '$' + counter + '$__';
   }
   var symbolInternalProperty = newUniqueString();
   var symbolDescriptionProperty = newUniqueString();
