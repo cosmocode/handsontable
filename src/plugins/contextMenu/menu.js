@@ -454,6 +454,7 @@ class Menu {
     }
     empty(TD);
     addClass(wrapper, 'htItemWrapper');
+    addClass(wrapper, item.key); // COSMOCODE
     TD.appendChild(wrapper);
 
     if (itemIsSeparator(item)) {
