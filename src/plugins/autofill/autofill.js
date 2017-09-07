@@ -10,6 +10,7 @@ Hooks.getSingleton().register('modifyAutofillRange');
 Hooks.getSingleton().register('beforeAutofill');
 
 const INSERT_ROW_ALTER_ACTION_NAME = 'insert_row';
+const INSERT_COLUMN_ALTER_ACTION_NAME = 'insert_col'; // COSMOCODE
 const INTERVAL_FOR_ADDING_ROW = 200;
 
 /**
@@ -282,6 +283,21 @@ class Autofill extends BasePlugin {
   }
 
   /**
+   * Add new row
+   *
+   * Added By COSMOCODE
+   *
+   * @private
+   */
+  addColumn() {
+    this.hot._registerTimeout(setTimeout(() => {
+      this.hot.alter(INSERT_COLUMN_ALTER_ACTION_NAME, void 0, 1, `${this.pluginName}.fill`);
+
+      this.addingStarted = false;
+    }, INTERVAL_FOR_ADDING_ROW));
+  }
+
+  /**
    * Add new rows if they are needed to continue auto-filling values.
    *
    * @private
@@ -296,6 +312,27 @@ class Autofill extends BasePlugin {
         this.addingStarted = true;
 
         this.addRow();
+      }
+    }
+  }
+
+  /**
+   * Add new rows if they are needed to continue auto-filling values.
+   *
+   * Added By COSMOCODE
+   *
+   * @private
+   */
+  addNewColumnIfNeeded() {
+    if (this.hot.view.wt.selections.fill.cellRange && this.addingStarted === false && this.autoInsertRow) {
+      var cornersOfSelectedCells = this.hot.getSelected();
+      var cornersOfSelectedDragArea = this.hot.view.wt.selections.fill.getCorners();
+      var nrOfTableCols = this.hot.countCols();
+
+      if (cornersOfSelectedCells[3] < nrOfTableCols - 1 && cornersOfSelectedDragArea[3] === nrOfTableCols - 1) {
+        this.addingStarted = true;
+
+        this.addColumn();
       }
     }
   }
@@ -489,6 +526,7 @@ class Autofill extends BasePlugin {
 
       this.showBorder(coords);
       this.addNewRowIfNeeded();
+      this.addNewColumnIfNeeded(); // COSMOCODE
     }
   }
 
